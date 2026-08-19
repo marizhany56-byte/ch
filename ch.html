@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطارية الخدمة 🔋</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #F9F1F7;
+            color: #4D3A48;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255,255,255,0.9);
+            padding: 35px 25px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(90,60,80,0.12);
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            font-size: 19px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .battery {
+            width: 200px;
+            height: 85px;
+            border: 5px solid #765A70;
+            border-radius: 16px;
+            margin: 25px auto;
+            padding: 6px;
+            position: relative;
+        }
+
+        .battery::after {
+            content: "";
+            position: absolute;
+            right: -16px;
+            top: 25px;
+            width: 11px;
+            height: 27px;
+            background: #765A70;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .battery-level {
+            height: 100%;
+            width: 0%;
+            background: #CDA9C2;
+            border-radius: 8px;
+            transition: width 1s ease;
+        }
+
+        .question {
+            font-size: 21px;
+            font-weight: bold;
+            margin: 25px 0 18px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            padding: 13px 24px;
+            border-radius: 15px;
+            background: #DEC9D9;
+            color: #4D3A48;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            background: #CDA9C2;
+        }
+
+        #result {
+            display: none;
+            margin-top: 25px;
+            padding: 22px;
+            background: #FBF7FA;
+            border-radius: 20px;
+            line-height: 1.9;
+            font-size: 18px;
+            animation: fadeIn 1s ease;
+        }
+
+        #percentage {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* القلب على الجنب */
+
+        #heartButton {
+            display: none;
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            text-align: center;
+            cursor: pointer;
+            animation: heartMove 1.5s infinite ease-in-out;
+        }
+
+        #heartButton .heart {
+            font-size: 65px;
+            filter: drop-shadow(0 5px 8px rgba(120,70,100,0.25));
+        }
+
+        #heartButton p {
+            margin-top: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #765A70;
+        }
+
+        @keyframes heartMove {
+
+            0% {
+                transform: translateY(-50%) translateX(0);
+            }
+
+            25% {
+                transform: translateY(-50%) translateX(-7px);
+            }
+
+            50% {
+                transform: translateY(-50%) translateX(0);
+            }
+
+            75% {
+                transform: translateY(-50%) translateX(7px);
+            }
+
+            100% {
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* الرسالة النهائية */
+
+        #finalMessage {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            overflow-y: auto;
+            padding: 30px 20px;
+            background: #F9F1F7;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .messageBox {
+            max-width: 650px;
+            margin: 60px auto;
+            padding: 30px 22px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            line-height: 2;
+            font-size: 18px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(100,70,90,0.1);
+        }
+
+        .verse {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #E4D5DF;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            #heartButton {
+                right: 10px;
+            }
+
+            #heartButton .heart {
+                font-size: 50px;
+            }
+
+            #heartButton p {
+                font-size: 11px;
+            }
+
+            .container {
+                padding: 28px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🔋 بطارية الخدمة</h1>
+
+        <p class="intro">
+            لو الخدمة موبايل...<br>
+            يا ترى بطاريتك كام؟ ❤️
+        </p>
+
+        <div class="battery">
+            <div class="battery-level" id="batteryLevel"></div>
+        </div>
+
+        <p class="question">
+            اختار نسبة بطاريتك في الخدمة:
+        </p>
+
+        <div class="buttons">
+
+            <button onclick="showResult(100)">
+                100%
+            </button>
+
+            <button onclick="showResult(50)">
+                50%
+            </button>
+
+            <button onclick="showResult(25)">
+                25%
+            </button>
+
+        </div>
+
+        <div id="result">
+
+            <div id="percentage"></div>
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+
+    <!-- القلب -->
+
+    <div id="heartButton" onclick="showFinalMessage()">
+
+        <div class="heart">
+            ❤️
+        </div>
+
+        <p>
+            اضغط هنا
+        </p>
+
+    </div>
+
+
+    <!-- الموسيقى -->
+
+    <audio id="music" src="123.mp3"></audio>
+
+
+    <!-- الرسالة النهائية -->
+
+    <div id="finalMessage">
+
+        <div class="messageBox">
+
+            <p>
+                ممكن الناس ما تشوفش الساعات اللي بتقضيها
+                وإنت بتصلي علشان مخدومك، ولا تشوف التضحيات
+                اللي قدمتها من وقتك وراحتك، وممكن محدش يعرف
+                قد إيه تعبت علشانه…
+                <br><br>
+
+                لكن ربنا شايف كل حاجة، ومش هينسى تعبك ❤️
+            </p>
+
+            <div class="verse">
+
+                «لِأَنَّ اللهَ لَيْسَ بِظَالِمٍ حَتَّى يَنْسَى
+                عَمَلَكُمْ وَالتَّعَبَ مِنَ الْمَحَبَّةِ الَّتِي
+                أَظْهَرْتُمُوهَا نَحْوَ اسْمِهِ.»
+
+                <br><br>
+
+                — عبرانيين ٦:١٠
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function showResult(level) {
+
+            const battery = document.getElementById("batteryLevel");
+            const result = document.getElementById("result");
+            const percentage = document.getElementById("percentage");
+            const message = document.getElementById("message");
+            const heart = document.getElementById("heartButton");
+
+            battery.style.width = level + "%";
+
+            percentage.innerHTML = level + "%";
+
+            if (level === 100) {
+
+                message.innerHTML =
+                    "جميل جدًا!  ❤️<br><br>" +
+                    "بس البطارية مش بتفضل 100% طول الوقت... " +
+                    "المهم تعرف تشحنها لما تبدأ تخلص.";
+
+            }
+
+            else if (level === 50) {
+
+                message.innerHTML =
+                    "يمكن محتاج تراجع... 🔋<br><br>" +
+                    "إنت بتاخد قوتك منين؟<br>" +
+                    "هل بتشحن نفسك في الصلاة؟<br>" +
+                    "ولا في كلمة ربنا؟<br>" +
+                    "ولا في وجودك مع ربنا؟";
+
+            }
+
+            else if (level === 25) {
+
+                message.innerHTML =
+                    "يمكن المشكلة مش إنك مش بتحب الخدمة... ❤️<br><br>" +
+                    "يمكن المشكلة إنك بتحاول تكمل من غير ما تشحن.<br><br>" +
+                    "مفيش موبايل هيكمل من غير شحن...<br>" +
+                    "وإنت كمان محتاج تشحن عند ربنا.";
+
+            }
+
+            result.style.display = "block";
+
+            setTimeout(function () {
+
+                heart.style.display = "block";
+
+            }, 700);
+        }
+
+
+        function showFinalMessage() {
+
+            const finalMessage =
+                document.getElementById("finalMessage");
+
+            const music =
+                document.getElementById("music");
+
+            finalMessage.style.display = "block";
+
+            music.currentTime = 0;
+
+            music.play();
+
+        }
+
+    </script>
+
+</body>
+
+</html>
